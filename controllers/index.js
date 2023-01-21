@@ -157,9 +157,6 @@ const getAllTransaction = async (req,res) => {
         })
         .skip(skip)
         .limit(limit);
-
-        
-
         res.status(200).json(transaction);
 
     } catch (error) {
