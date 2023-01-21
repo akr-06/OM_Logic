@@ -18,14 +18,10 @@ const WalletSchema = new mongoose.Schema({
         required: true,
         auto: true
     },
-
     name : {
         type : String
     },
-    date : {
-        type : Date,
-        default : Date.now
-    }
+
 },{timestamps : true})
 
 module.exports = mongoose.model('Wallets', WalletSchema)

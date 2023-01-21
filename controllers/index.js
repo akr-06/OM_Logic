@@ -6,8 +6,25 @@ const Transaction = require('../models/transaction');
 const setupWallet = async (req,res) => {
     try {
         console.log("Inside setupWallet");
-        const  wallet = await Wallet.create(req.body);
-        res.status(201).json({ wallet });
+
+        let balance = req.body.balance;
+        balance = Number(balance.toFixed(4));
+
+        const payload = {
+            balance : balance,
+            name : req.body.name
+        }
+
+        const  wallet = await Wallet.create(payload);
+        
+        res.status(201).json({
+            walletId : wallet.walletId,
+            balance : wallet.balance,
+            transactionId : wallet.transactionId,
+            name : wallet.name,
+            date : wallet.createdAt
+        });
+
     } catch (error) {
         throw error;
     }
@@ -21,11 +38,7 @@ const walletDetails = async (req,res) => {
         const wallet = await Wallet.findOne(walletID);
 
         let fixed = wallet.balance.toFixed(4);
-        // console.log(fixed);
-        // console.log(typeof fixed);
         fixed = Number(fixed);
-        // console.log(fixed);
-        // console.log(typeof fixed);
 
         res.status(200).json({
             walletId : wallet.walletId,
@@ -54,15 +67,15 @@ const addCreditToWallet = async (req,res) => {
         
         await Wallet.updateOne(walletID,{ balance : wallet.balance});
 
-        const obj = {
-            balance : wallet.balance,
-            transactionId : mongoose.Types.ObjectId(),
-            description : req.body.description,
-            type : 'Credit',
-            walletId : req.params.walletId
-        }
+        // const obj = {
+        //     balance : wallet.balance,
+        //     transactionId : mongoose.Types.ObjectId(),
+        //     description : req.body.description,
+        //     type : 'Credit',
+        //     walletId : req.params.walletId
+        // }
 
-        await Transaction.create(obj);
+        // await Transaction.create(obj);
 
         res.status(200).json({
             balance : wallet.balance,
@@ -80,8 +93,8 @@ const addCreditToWallet = async (req,res) => {
 const getAllProduct = async (req,res) => {
     try {
         console.log("Inside getAllProduct");
-        const products = await Product.find();
-        res.status(200).json({ products, count: products.length });
+        const products = await Product.find({},{_id : 0, createdAt: 0, updatedAt : 0, __v:0 });
+        res.status(200).json(products);
     } catch (error) {
         throw error;
     }
@@ -106,8 +119,9 @@ const purchaseProduct = async (req,res) => {
             const obj = {
                 balance : wallet.balance,
                 transactionId : mongoose.Types.ObjectId(),
-                description : req.body.description,
-                type : 'Debit',
+                description : product.description,
+                productId : productID,
+                type : 'debit',
                 walletId : req.params.walletId
             }
 
@@ -117,6 +131,7 @@ const purchaseProduct = async (req,res) => {
                 balance : wallet.balance,
                 transactionId : mongoose.Types.ObjectId(),
                 description : product.description,
+                type : "debit",
                 productId : req.body.productId,
                 createdAt : new Date()
             })
@@ -134,7 +149,16 @@ const getAllTransaction = async (req,res) => {
         const limit = Number(req.query.limit) || 2;
         const skip = (page - 1) * limit;
 
-        const transaction = await Transaction.find(req.params).skip(skip).limit(limit);
+        const transaction = await Transaction.find(req.params, {
+            _id : 0,
+            updatedAt : 0,
+            __v : 0,
+            walletId : 0
+        })
+        .skip(skip)
+        .limit(limit);
+
+        
 
         res.status(200).json(transaction);
 

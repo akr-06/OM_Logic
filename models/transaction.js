@@ -17,8 +17,10 @@ const TransactionSchema = new mongoose.Schema({
         required: true,
         auto: true
     },
-
     description : {
+        type : String
+    },
+    productId : {
         type : String
     },
     type : {
