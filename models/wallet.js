@@ -2,10 +2,7 @@ const mongoose = require('mongoose');
 
 const WalletSchema = new mongoose.Schema({
     walletId : {
-        type: mongoose.Schema.Types.ObjectId,
-        index: true,
-        required: true,
-        auto: true
+        type : String
     },
     balance : {
         type : Number,
@@ -24,4 +21,4 @@ const WalletSchema = new mongoose.Schema({
 
 },{timestamps : true})
 
-module.exports = mongoose.model('Wallets', WalletSchema)
+module.exports = mongoose.model('Wallet', WalletSchema)

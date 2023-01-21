@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const wallet = require('./wallet');
+const {Schema} = mongoose;
 
 // balance: number, 
 // transactionId: number / string, 
@@ -27,8 +27,10 @@ const TransactionSchema = new mongoose.Schema({
         type : String,
     },
     walletId : {
-        type : String,
+        type : Schema.Types.ObjectId,
+        ref : 'Wallet'
     }
+
 },{timestamps : true})
 
-module.exports = mongoose.model('Transactions', TransactionSchema)
+module.exports = mongoose.model('Transaction', TransactionSchema)
