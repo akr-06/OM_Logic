@@ -154,6 +154,7 @@ const purchaseProduct = async (req,res) => {
         }
     } catch (error) {
         await session.abortTransaction();
+        //throw error;
     }
     finally{
         session = null;
