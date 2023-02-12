@@ -17,6 +17,7 @@ const setupAndStartServer = async () => {
     await connectDB(process.env.MONGO_URL);
     app.listen(PORT,()=>{
         console.log(`Server started at ${PORT}`);
+        console.log('new branch')
     })
 }
 
