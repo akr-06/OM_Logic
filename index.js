@@ -6,6 +6,9 @@ const routes = require('./routes/index');
 
 const PORT = process.env.PORT;
 
+//I am just testing
+// I did the testing, works fine
+
 const connectDB = require('./db/connect');
 
 app.use(express.json());
