@@ -6,6 +6,10 @@ const routes = require('./routes/index');
 
 const PORT = process.env.PORT;
 
+//I am just testing
+// I did the testing, works fine
+//After creating a PR again making changes
+
 const connectDB = require('./db/connect');
 
 app.use(express.json());
